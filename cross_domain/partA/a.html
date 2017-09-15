@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<iframe src="" frameborder="0" class="i-frame">
+
+	</iframe>
+	<style>
+		.i-frame{
+			width: 400px;
+			height: 400px;
+			margin: 0 auto;
+			border: 1px solid #ccc;
+		}
+		
+	</style>
+	<script>
+		document.domain = 'a.com';
+		var ifr = document.createElement('iframe');
+		ifr.src = 'http://www.script.a.com/b.html';
+		ifr.display = none;
+		document.body.appendChild(ifr);
+		ifr.onload = function(){
+		var doc = ifr.contentDocument || ifr.contentWindow.document;
+		//在这里操作doc，也就是b.html
+		ifr.onload = null;
+		};
+	</script>
+</body>
+</html>

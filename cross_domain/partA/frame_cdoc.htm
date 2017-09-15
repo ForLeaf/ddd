@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<input type="button" onclick="showCDoc()" value="Show content-document's first tag" />
+	<script type="text/javascript">
+		function showCDoc()
+			{
+			var x=parent.document.getElementById("leftFrame")
+			alert(x.contentDocument.documentElement.tagName)
+			}
+	</script>
+</body>
+</html>
