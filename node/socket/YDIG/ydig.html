@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+
+<body>
+	<div class="loginmsg">
+		<div class="lBefore">
+			<input type="text" class="username">
+			<button class="login_btn">登录</button>
+		</div>
+		<div class="lAfter">
+			<p class="welcome"></p>
+			<button class="game_start_btn">游戏开始</button>
+			<span class="myTime"></span>
+			<span class="count_down"></span>
+		</div>
+	</div>
+	<div class="box">
+		<canvas class="aplette" width="650" height="420"></canvas>
+	</div>
+	<div class="action">
+		<button class="clear_btn">清空</button>
+	</div>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		.box {
+			width: 650px;
+			height: 420px;
+			border: 1px solid #ccc;
+		}
+
+		.clear_btn {
+			width: 100px;
+			height: 34px;
+			border: 0;
+			font-size: 16px;
+			text-align: center;
+			background-color: rgb(254, 67, 101);
+			color: #FFF;
+			cursor: pointer;
+			border-radius: 6px;
+			margin: 10px 0 0 20px;
+		}
+	</style>
+	<script src="../js/socket.js"></script>
+	<script src="../js/jquery-3.1.1.js"></script>
+	<script>
+		var aplette = $('.aplette')[0];
+		var clearBtn = $('.clear_btn')[0];
+		var ctx = aplette.getContext('2d');
+
+		var socket = io('http://localhost:3000');
+
+		var gameStatus = false;
+
+		$('.login_btn').click(function () {
+			if (!$('.username').val()) {
+				alert('请输入用户名');
+			} else {
+				socket.emit('login', $('.username').val());
+				socket.on('sendGuid', function (data) {
+					$('.welcome').html(`欢迎登录  <span class="login_name" data-guid="${data}">${$('.username').val()}</span>`);
+					$('.lBefore').hide();
+					$('.lAfter').show();
+				})
+			}
+		})
+
+		$('.game_start_btn').click(function () {
+			socket.emit('gameStart', $('.login_name').html());
+		})
+
+		socket.on('beginGame', function (data) {
+			console.log('aaaa')
+
+			guid = $('.login_name').attr('data-guid');
+			if (data.status) {
+				if (data.guid == guid) {
+					gameStatus = true;
+					$('.myTime').html('你开始作画');
+				} else {
+					$('.myTime').html('你开始猜题');
+				}
+
+				socket.on('time', function (data) {
+					$('.count_down').html(data);
+				})
+				socket.on('timeout', function (data) {
+					ctx.clearRect(0, 0, aplette.width, aplette.height);
+					gameStatus = false;
+					aplette.onmousedown = null;
+					clearBtn.onclick = null;
+					$('.myTime').html('游戏结束');
+				})
+			}
+			drawGame(gameStatus);
+		})
+
+
+		function drawGame(gameStatus) {
+
+			if (gameStatus) {
+
+				console.log(gameStatus, aplette, clearBtn)
+
+				aplette.onmousedown = function (e) {
+					ctx.beginPath();
+					ctx.moveTo(e.clientX, parseInt(e.clientY - this.offsetTop));
+					socket.emit('drawStart', {
+						lineX: e.clientX,
+						lineY: parseInt(e.clientY - this.offsetTop)
+					})
+					aplette.onmousemove = function (e) {
+						ctx.lineTo(e.clientX, parseInt(e.clientY - this.offsetTop));
+						socket.emit('draw', {
+							lineX: e.clientX,
+							lineY: parseInt(e.clientY - this.offsetTop)
+						});
+						ctx.stroke();
+					}
+				}
+
+				aplette.onmouseup = function (e) {
+					aplette.onmousemove = null;
+
+				}
+				clearBtn.onclick = function () {
+					ctx.clearRect(0, 0, aplette.width, aplette.height);
+					socket.emit('clearDraw','');
+				}
+			} else {
+
+				console.log('aaaaaaaa')
+				ctx.beginPath();
+				socket.on('getDrawStart', function (data) {
+
+					ctx.moveTo(data.lineX, data.lineY);
+				})
+				socket.on('getDraw', function (data) {
+					console.log(data)
+					ctx.lineTo(data.lineX, data.lineY);
+					ctx.stroke();
+				})
+
+				socket.on('drawClear',function(data){
+					ctx.clearRect(0, 0, aplette.width, aplette.height);
+				})
+			}
+		}
+	</script>
+</body>
+
+</html>

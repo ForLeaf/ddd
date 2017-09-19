@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+
+	<input type="text">
+	<button onclick="send()">添加新好友</button>
+	<button onclick="">创建群组</button>
+	<ul class="friends"></ul>
+
+	<script src="../js/socket.js"></script>
+	<script>
+		var socket = io('http://localhost:3000');
+		function send(){
+			socket.emit('add',document.querySelector('input').value);
+		}
+		socket.on('create',function(res){
+			var parent = document.querySelector('.list_ul');
+			console.log(res)
+			parent.innerHTML += res.data.map(function(item){
+				return `
+					<li>${item.title}</li>
+				`;
+			}).join('');
+		})
+	</script>
+</body>
+</html>
