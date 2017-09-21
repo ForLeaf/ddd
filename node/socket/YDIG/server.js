@@ -21,50 +21,58 @@ var getReadyUser = [];
 io.on('connection',function(socket){
 	socket.on('login',function(data){
 		var obj = {};
-		obj[data] = socket.id;
+		obj.guid = socket.id;
+		obj.name = data;
 		userList.push(obj);
 		socket.emit('sendGuid',socket.id)
 	})
 	socket.on('gameStart',function(data){
-		getReadyUser.push(data);
+		var obj = {};
+		obj.guid = socket.id;
+		obj.name = data;
+		getReadyUser.push(obj);
 
-		console.log(io.sockets)
 		if(getReadyUser.length >= 2){
 			var num = parseInt(Math.random() * getReadyUser.length);
-			var guid;
-			for(var obj of userList){
-				if(obj[getReadyUser[num]]){
-					guid = obj[getReadyUser[num]];
-				}
-			}
-			
-			io.emit('beginGame',{
-				status : true,
-				guid : guid
+			var guid = getReadyUser[num].guid;
 
-			})
+			for(var item of getReadyUser){
+				io.sockets.sockets[item.guid].emit('beginGame',{
+					status : true,
+					guid : guid
+				})
+			}
 
 			var timeout = 30;
 			var timer = setInterval(function(){
 				timeout--;
-				io.emit('time',timeout);
+				for(var item of getReadyUser){
+					io.sockets.sockets[item.guid].emit('time',timeout)
+				}
 				if(timeout <= 0){
 					clearInterval(timer);
-					io.emit('timeout','');
+					for(var item of getReadyUser){
+						io.sockets.sockets[item.guid].emit('timeout','')
+					}
 					getReadyUser = [];
 				}
 			},1000)
 		}
 	})
 	socket.on('drawStart',function(data){
-		//console.log('drawStart',data);
-		io.emit("getDrawStart",data);
+		
+		for(var item of getReadyUser){
+			io.sockets.sockets[item.guid].emit('getDrawStart',data)
+		}
 	})
 	socket.on('draw',function(data){
-		//console.log('draw',data);
-		io.emit("getDraw",data); 
+		for(var item of getReadyUser){
+			io.sockets.sockets[item.guid].emit('getDraw',data)
+		}
 	})
 	socket.on('clearDraw',function(data){
-		io.emit('drawClear','');
+		for(var item of getReadyUser){
+			io.sockets.sockets[item.guid].emit('drawClear','')
+		}
 	})
 })

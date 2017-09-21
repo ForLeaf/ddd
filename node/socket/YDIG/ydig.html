@@ -96,10 +96,10 @@
 					$('.count_down').html(data);
 				})
 				socket.on('timeout', function (data) {
-					ctx.clearRect(0, 0, aplette.width, aplette.height);
-					gameStatus = false;
+					
 					aplette.onmousedown = null;
 					clearBtn.onclick = null;
+					gameStatus = false;
 					$('.myTime').html('游戏结束');
 				})
 			}
@@ -154,6 +154,7 @@
 
 				socket.on('drawClear',function(data){
 					ctx.clearRect(0, 0, aplette.width, aplette.height);
+					ctx.beginPath();
 				})
 			}
 		}
