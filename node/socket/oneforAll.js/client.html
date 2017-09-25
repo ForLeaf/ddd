@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		ul,li{
+			list-style: none;
+		}
+		.msgBox{
+			width: 400px;
+			border:1px solid #ccc;
+		}
+		.msgBox>ul{
+			width: 100%;
+			height: 440px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		.msgBox>ul>li{
+			width: 100%;
+			font-size: 16px;
+			color: #666;
+		}
+		.left{
+			text-align: left;
+		}
+		.right{
+			color: #f0c22d;
+			text-align: right;
+		}
+		.sendBox{
+			width: 400px;
+			position: relative;
+			border:1px solid #ccc;
+		}
+		.sendBox .textArea{
+			height: 100px;
+			box-sizing: border-box;
+			padding-right: 100px;
+		}
+		.sendBox .textArea .sendText{
+			width: 100%;
+			height: 100%;
+			border:0;
+		}
+		.sendBox .btnArea{
+			height: 100px;
+			width: 100px;
+			position: absolute;
+			right: 0;
+			top:0;
+		}
+		.sendBox .textArea .sendBtn{
+			width: 100%;
+			height: 28px;
+			border:0;
+			background: #ff6060;
+			color: #fff;
+
+		}
+	</style>
+</head>
+<body>
+	<div class="msgBox">
+		<ul>
+			<li class="left"></li>
+		</ul>
+	</div>
+	<div class="sendBox">
+		<div class="textArea">
+			<input type="text" class="sendText">
+		</div>
+		<div class="btnArea">
+			<button class="sendBtn">发送</button>
+		</div>
+	</div>
+	<script src="../../lib/jquery-3.1.1.js"></script>
+	<script>
+		
+	</script>
+</body>
+</html>

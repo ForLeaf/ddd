@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		[v-cloak]{
+			display:none;
+		}
+	</style>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<p style="color:red;">v-text</p>
+		<div v-text="name"></div>
+		<p style="color:red;">v-html</p>
+		<div v-html="vhtml"></div>
+		<p style="color:red;">v-show</p>
+		<div v-show="isShow" v-text="name"></div>
+		<p style="color:red;">v-if && v-else-if && v-else</p>
+		<div v-if="vIf == 'a'">{{vIf}}</div>
+		<div v-else-if="vIf == 'b'">{{vIf}}</div>
+		<div v-else="vIf == 'c'">{{vIf}}</div>
+		<button @click="changeTo">change</button>
+		<p style="color:red;">v-for</p>
+		<div v-for="a in arr">{{a}}</div>
+		<p style="color:red;">v-on</p>
+		<div>
+			<button v-on:click="isShow = !isShow">change</button>
+		</div>
+		<p style="color:red;">v-bind</p>
+		<div v-bind:class="name"></div>
+		<p style="color:red;">v-model</p>
+		<select name="" id="" v-model="show">
+			<option v-for="a in animate" :value="a.value">{{a.name}}</option>
+		</select>
+		<p style="color:red;">v-pre</p>
+		<div v-pre>{{name}}</div>
+		<p style="color:red;">v-cloak</p>
+		<div v-cloak>{{show}}</div>
+		<p style="color:red;">v-once</p>
+		<div v-once>{{show}}</div>
+	</div>
+	<script src="../js/vue.js"></script>
+	<script>
+		const vx = new Vue({
+			el : '#app',
+			data : {
+				name : 'xuqing',
+				vhtml : '<p>姓名:<span>xuqing</span></p>',
+				isShow : true,
+				arr : ['a','b','c'],
+				vIf : 'a',
+				show : 'linear',
+				animate : [{
+					name : '平滑',
+					value : 'linear'
+				},{
+					name : '快进',
+					value : 'ease-in'
+				},{
+					name : '快出',
+					value : 'ease-out'
+				}],
+			},
+			methods : {
+				changeTo(){
+					//console.log(this)
+					let rand = parseInt(Math.random()*3);
+					console.log(rand)
+					let num = this.arr[rand];
+					this.vIf = num;
+				}
+			},
+			mounted () {
+				console.log('mounted')
+			}
+		})
+	</script>
+</body>
+</html>

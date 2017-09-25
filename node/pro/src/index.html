@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<button class="btn">上传</button>
+	<script>
+		var btn = document.querySelector('.btn');
+		btn.onclick = function(e){
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(e){
+				if(xhr.readyState == 4 && xhr.status >= 200 && xhr.status <= 304){
+					console.log(xhr.responseText);
+				}
+			}
+			xhr.open('POST','http:localhost:3000/login',true);
+			xhr.send({
+				data : 'hello'
+			})
+		}
+	</script>
+</body>
+</html>
