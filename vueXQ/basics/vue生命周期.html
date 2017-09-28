@@ -7,6 +7,70 @@
 	<title>Document</title>
 </head>
 <body>
-	
+	<div id="app">
+		<p v-text="name"></p>
+		<button @click="change">ok</button>
+	</div>
+	<script src="../js/vue.js"></script>
+	<script>
+		const vm = new Vue({
+			el : '#app',
+			data : {
+				name : 'xuqing',
+				num : 0,
+			},
+			methods:{
+				change(){
+					//this.num = 0;
+					this.name = "xuqingMark" + ++this.num; 
+				}
+			},
+			mounted () {
+				this.$nextTick(function(){
+					console.log('mounted');
+					console.log(this.num);
+					console.log(this.$el);
+				})
+			},
+			beforeCreate () {
+				console.log('beforeCreate')
+				console.log(this.name);
+				console.log(this.$el);
+			},
+			created () {
+				console.log('created')
+				console.log(this.name);
+				console.log(this.$el);
+			},
+			beforeMount () {
+				console.log('beforeMount')
+				console.log(this.name);
+				console.log(this.$el);
+			},
+			beforeUpdate () {
+				console.log('beforeUpdate')
+				console.log(this.name);
+				console.log(this.$el);
+			},
+			updated () {
+				console.log('updated')
+				console.log(this.name);
+				console.log(this.$el);
+			},
+			activated () {
+				console.log('activated')
+			},
+			deactivated () {
+				console.log('deactivated')
+			},
+			beforeDestroy () {
+				console.log('beforeDestroy')
+			},
+			destroyed () {
+				console.log('destroyed')
+			},
+		})
+		
+	</script>
 </body>
 </html>

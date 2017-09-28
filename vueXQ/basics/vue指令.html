@@ -15,23 +15,42 @@
 	<div id="app" v-cloak>
 		<p style="color:red;">v-text</p>
 		<div v-text="name"></div>
+		
 		<p style="color:red;">v-html</p>
 		<div v-html="vhtml"></div>
+
 		<p style="color:red;">v-show</p>
 		<div v-show="isShow" v-text="name"></div>
+
 		<p style="color:red;">v-if && v-else-if && v-else</p>
 		<div v-if="vIf == 'a'">{{vIf}}</div>
 		<div v-else-if="vIf == 'b'">{{vIf}}</div>
 		<div v-else="vIf == 'c'">{{vIf}}</div>
 		<button @click="changeTo">change</button>
+
 		<p style="color:red;">v-for</p>
 		<div v-for="a in arr">{{a}}</div>
+
 		<p style="color:red;">v-on</p>
 		<div>
 			<button v-on:click="isShow = !isShow">change</button>
 		</div>
+
 		<p style="color:red;">v-bind</p>
 		<div v-bind:class="name"></div>
+		<!-- 内联字符串拼接 -->
+		<!-- <img :src="'/path/to/images/' + fileName"> -->
+
+		<!-- 命名问题defaule_A-b -->
+		<div :class="{'defaule_A-b' : isRed}">12</div>
+		<div :class="[classA, classB]">13</div>
+		<div :class="[classA,{classB:isB}]"></div>
+		<!-- style 绑定 -->
+		<div :style="{ fontSize: size + 'px' }">11111</div>
+		<div :style="[styleObjectA, styleObjectB]">111</div>
+		<!-- 绑定一个有属性的对象 -->
+		<div v-bind="{ id: someProp, 'other-attr': otherProp }"></div>
+
 		<p style="color:red;">v-model</p>
 		<select name="" id="" v-model="show">
 			<option v-for="a in animate" :value="a.value">{{a.name}}</option>
@@ -48,6 +67,21 @@
 		const vx = new Vue({
 			el : '#app',
 			data : {
+				otherProp : 'sss',
+				someProp : 'www',
+				styleObjectB:{
+					color : 'red',
+				},
+				styleObjectA : {
+					fontSize : 12 + 'px',
+				},
+				size : 12,
+				isB : true,
+				classA : 'a',
+				classB : 'b',
+				fileName : '12',
+				red : 'green',
+				isRed : true,
 				name : 'xuqing',
 				vhtml : '<p>姓名:<span>xuqing</span></p>',
 				isShow : true,
