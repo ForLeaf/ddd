@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app">
+		<xq-test></xq-test>
+		<router-view></router-view>
+	</div>
+	<script src="../js/vue.js"></script>
+	<script src="../js/vuex.js"></script>
+	<script src="../js/vue-router.js"></script>
+	<script>
+		var xqIndex = {
+			template : `
+				<p>index</p>
+			`,
+		};
+		var xqList = {
+			template : `
+				<p>list</p>
+			`,
+		};
+		var xqDetial = {
+			template : `
+				<p>detial</p>
+			`,
+		};
+
+		//必须使用router才能加载
+		var router = new VueRouter({
+			routes : [{
+				path : '/',
+				redirect: '/index'
+			},{
+				path: '/index',
+				component : xqIndex
+			},{
+				path: '/list',
+				component : xqList
+			},{
+				path: '/detail',
+				component: xqDetial
+			}]
+		});
+
+		//必须使用store才能加载
+		var store = new Vuex.Store({
+			state:{
+				name : '123'
+			},
+			mutations: {
+				setName(state,name){
+					state.name = name;
+				}
+			},
+			actions: {
+				setNames(context,data){
+					context.commit('setName',data)
+				}
+			},
+			getters:{
+				getName(state){
+					return state.name;
+				}
+			}
+		})
+
+		var xqHeader = {
+			template : `
+				<div>
+					<p>{{name}}</p>
+					<p>{{otherName}}</p>
+				</div>
+			`,
+			data(){
+				return {
+					name : 'hash',
+				}
+			},
+			computed: {
+				otherName(){
+					return this.$store.getters.getName
+				}
+			}
+		};
+
+		//不要使用驼峰命名 推荐w3c标准写法
+		Vue.component('xq-test',{
+			template:`
+				<div>
+					<p>xqTest</p>
+					<p>{{otherName}}</p>
+					<p>{{cat.name}}</p>
+					<p>{{cat.catch}}</p>
+					<button @click="change">change</button>	
+				</div>	
+			`,
+			computed:{
+				otherName(){
+					return this.$store.getters.getName
+				}
+			},
+			data(){
+				return {
+					cat : {
+						catch: 'mouse',
+						name: 'tom' 
+					}
+				}
+			},
+			methods:{
+				change(){
+
+					//向data中的对象添加属性
+					this.$set(this.cat,'eat','cake');
+					this.cat = Object.assign({}, this.cat, { 'a': 1, b: 2 })
+					console.log(this.cat)
+				}
+			},
+			mounted () {
+				this.$nextTick(function(){
+					console.log('触发更新')
+				})
+			}
+
+		});
+		var vm = new Vue({
+			el: "#app",
+			// template:`
+			// 	<div>
+			// 		<xqIndex></xqIndex>
+			// 		<xqHeader></xqHeader>
+			// 	</div>
+			// `,
+			// components: {
+			// 	xqIndex,
+			// 	xqHeader,
+			// },
+			data :{
+
+			},
+			methods:{
+
+			},
+			router,
+			store
+		})
+	</script>
+</body>
+</html>
